@@ -2,4 +2,4 @@
 Practice project, golang x ethereum blockchain
 
 
-![CI](https://github.com/<yourname>/indexerc/actions/workflows/ci.yml/badge.svg)
+![CI Status](https://github.com/GregoireBailly/indexerc/actions/workflows/ci.yml/badge.svg)
