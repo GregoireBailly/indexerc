@@ -1,2 +1,2 @@
-# dapprank
-Practice project, golang, ethereum x blockchain
+# IndexERC
+Practice project, golang x ethereum blockchain
