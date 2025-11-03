@@ -7,21 +7,29 @@ on:
     branches: [ main ]
 
 jobs:
-  ci-checks:
+  build-test-lint:
     runs-on: ubuntu-latest
-    container:
-      image: golang:1.25.1-alpine
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install make (if missing)
-        run: apk add --no-cache make
- 
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sh -s -- -b $(go env GOPATH)/bin v1.61.0
-      - name: Run CI pipeline
-        run: make ci
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: go build ./...
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
