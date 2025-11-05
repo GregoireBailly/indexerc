@@ -1,3 +1,43 @@
-package main;
+package main
 
-func main() {}
+import (
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/GregoireBailly/indexerc/internal/eth"
+)
+
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
+	fmt.Println("🚀 Starting indexERC — connecting to Ethereum mainnet…")
+
+    url := os.Getenv("ETH_RPC_URL")
+    key := os.Getenv("ETH_RPC_API_KEY")
+    if url == "" || key == "" {
+        return fmt.Errorf("missing connexion info in environment")
+	}
+
+    rpcURL := fmt.Sprintf("%s/%s", url, key)
+	ctx := context.Background()
+
+	client, err := eth.New(ctx, rpcURL)
+	if err != nil {
+		return fmt.Errorf("Failed to connect to Ethereum: %v\n", err)
+	}
+	defer client.Close()
+
+	block, err := client.LatestBlock(ctx)
+	if err != nil {
+		return fmt.Errorf("Failed to fetch latest block: %v\n", err)
+	}
+
+	fmt.Printf("✅ Connected! Latest block: %d\n", block)
+	return nil
+}
