@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/GregoireBailly/indexerc/internal/eth"
+	"github.com/GregoireBailly/indexerc/internal/analyzer"
 )
 
 func main() {
@@ -33,11 +34,14 @@ func run() error {
 	}
 	defer client.Close()
 
-	block, err := client.LatestBlock(ctx)
+	counter := analyzer.NewCounter(client)
+
+	count, err := counter.Count(ctx, 10, eth.ERC20TransferQuery())
 	if err != nil {
-		return fmt.Errorf("Failed to fetch latest block: %v\n", err)
+		return fmt.Errorf("Failed to count: %v\n", err)
 	}
 
-	fmt.Printf("✅ Connected! Latest block: %d\n", block)
+	fmt.Printf("✅ Connected!\n")
+	fmt.Printf("Count of ERC20 tranfer is: %d\n", count)
 	return nil
 }
