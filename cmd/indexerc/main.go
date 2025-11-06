@@ -30,7 +30,7 @@ func run() error {
 
 	client, err := eth.New(ctx, rpcURL)
 	if err != nil {
-		return fmt.Errorf("Failed to connect to Ethereum: %v\n", err)
+		return fmt.Errorf("failed to connect to Ethereum: %v", err)
 	}
 	defer client.Close()
 
@@ -38,7 +38,7 @@ func run() error {
 
 	count, err := counter.Count(ctx, 10, eth.ERC20TransferQuery())
 	if err != nil {
-		return fmt.Errorf("Failed to count: %v\n", err)
+		return fmt.Errorf("failed to count: %v", err)
 	}
 
 	fmt.Printf("✅ Connected!\n")
